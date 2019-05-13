@@ -22,6 +22,16 @@
     if (isset($_GET['delete'])) {
         $id=$_GET['delete'];
 
+        $sql = "SELECT photo FROM crud WHERE id=?";
+        $stmt2=$conn->prepare($sql);
+        $stmt2->bind_param("s", $id);
+        $stmt2->execute();
+        $result2=$stmt2->get_result();
+        $row=$result2->fetch_assoc();
+
+        $imagepath = $row['photo'];
+        unlink($imagepath);
+
         $query = "DELETE FROM crud WHERE id=?";
         $stmt=$conn->prepare($query);
         $stmt->bind_param("i", $id);
@@ -30,5 +40,19 @@
         $_SESSION['response']="Successfully deleted!!";
         $_SESSION['res_type']="danger";
     }
-    
+    if(isset($_GET['edit'])) {
+        $id=$_GET['edit'];
+        $query="SELECT * FROM crud WHERE id=?";
+        $stmt=$conn->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result=$stmt->get_result();
+        $row=$result->fetch_assoc();
+
+        $id=$row['id'];
+        $name=$row['name'];
+        $email=$row['email'];
+        $phone=$row['phone'];
+        $photo=$row['photo'];
+    }
 ?>

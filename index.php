@@ -68,17 +68,20 @@
             <div class="col-md-4">
                 <h3 class="text-center text-info">Add Record</h3>
                 <form action="action.php" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" value="<?= $id ?>">
                     <div class="form-group">
-                        <input type="text" name="name" class="form-control" placeholder="Enter name" required>
+                        <input type="text" name="name" value="<?= $name ?>" class="form-control" placeholder="Enter name" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" name="email" class="form-control" placeholder="Enter e-mail" required>
+                        <input type="email" name="email" value="<?= $email ?>" class="form-control" placeholder="Enter e-mail" required>
                     </div>
                     <div class="form-group">
-                        <input type="tel" name="phone" class="form-control" placeholder="Enter phone number" required>
+                        <input type="tel" name="phone" value="<?= $phone ?>" class="form-control" placeholder="Enter phone number" required>
                     </div>
                     <div class="form-group">
+                        <input type="hidden" name="oldimage" value="<?= $photo; ?>">
                         <input type="file" id="image" name="image" class="custom-file" required>
+                        <img src="<?= $photo ?>" alt="" width="120" class="img-thumbnail">
                     </div>
                     <div class="form-group">
                         <input type="submit" name="add" class="btn btn-primary btn-block" value="Add Record">
@@ -115,7 +118,7 @@
                             <td><?= $row['phone'] ?></td>
                             <td>
                                 <a href="details.php?details=<?= $row['id'];?>" class="badge badge-primary p-2">Details</a> |
-                                <a href="action.php?delete=<?= $row['id'];?>" class="badge badge-danger p-2">Delete</a> |
+                                <a href="action.php?delete=<?= $row['id'];?>" class="badge badge-danger p-2" onclick="return confirm('Do you want to delete this record?');">Delete</a> |
                                 <a href="index.php?edit=<?= $row['id'];?>" class="badge badge-success p-2">Edit</a>
                             </td>
                         </tr>
