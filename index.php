@@ -1,3 +1,6 @@
+<?php
+    include("action.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,12 +56,18 @@
             <div class="col-md-10">
                 <h3 class="text-center text-dark mt-2">Advanced CRUD App Using PHP & MySQLi Prepared Statement (Object Oreinted)</h3>
                 <hr>
+                <?php if(isset($_SESSION['response'])){ ?>
+                <div class="alert alert-<?= $_SESSION['res_type'] ?> alert-dismissible text-center">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <b><?= $_SESSION['response'] ?></b>
+                </div>
+                <?php } unset($_SESSION['response']) ?>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
                 <h3 class="text-center text-info">Add Record</h3>
-                <form action="#" metod="post" enctype="multiplart/form-data">
+                <form action="action.php" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <input type="text" name="name" class="form-control" placeholder="Enter name" required>
                     </div>
@@ -68,8 +77,8 @@
                     <div class="form-group">
                         <input type="tel" name="phone" class="form-control" placeholder="Enter phone number" required>
                     </div>
-                    <div class="form-gourp">
-                        <input type="file" name="image" class="custom-file">
+                    <div class="form-group">
+                        <input type="file" id="image" name="image" class="custom-file" required>
                     </div>
                     <div class="form-group">
                         <input type="submit" name="add" class="btn btn-primary btn-block" value="Add Record">
@@ -78,6 +87,13 @@
             </div>
             <div class="col-md-8">
                 <h3 class="text-center text-info">Records Present In The Database</h3>
+                <?php 
+                    $query = "SELECT * FROM crud";
+                    $stmt=$conn->prepare($query);
+                    $stmt->execute();
+                    $result=$stmt->get_result();
+                ?>
+
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -90,18 +106,20 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php while($row=$result->fetch_assoc()) { ?>
                         <tr>
-                            <td>1</td>
-                            <td><img src="" width="25"></td>
-                            <td>Ivan Mejico</td>
-                            <td>ivan.mejico21@gmail.com</td>
-                            <td>99999999999999</td>
+                            <td><?= $row['id']; ?></td>
+                            <td><img src="<?= $row['photo']; ?>" width="25"></td>
+                            <td><?= $row['name'] ?></td>
+                            <td><?= $row['email'] ?></td>
+                            <td><?= $row['phone'] ?></td>
                             <td>
-                                <a href="" class="badge badge-primary p-2">Details</a> |
-                                <a href="" class="badge badge-danger p-2">Delete</a> |
-                                <a href="" class="badge badge-success p-2">Edit</a>
+                                <a href="details.php?details=<?= $row['id'];?>" class="badge badge-primary p-2">Details</a> |
+                                <a href="action.php?delete=<?= $row['id'];?>" class="badge badge-danger p-2">Delete</a> |
+                                <a href="index.php?edit=<?= $row['id'];?>" class="badge badge-success p-2">Edit</a>
                             </td>
                         </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
